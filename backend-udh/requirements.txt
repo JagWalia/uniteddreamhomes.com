@@ -1,0 +1,15 @@
+
+
+pip
+wheel
+py
+PyYAML
+boto3
+requests
+certifi
+
+xmltodict
+# SQLAlchemy
+
+aws-cdk-lib==2.97.0
+constructs>=10.0.0,<11.0.0

@@ -1,0 +1,31 @@
+aws:
+  account: "135815141753"
+
+  region: us-east-1
+  vpc_id: vpc-00555d7586b3a3184 
+  no_ingress_security_group: sg-03cf0ca9b828d96d2 ## noingress
+  private_subnets:
+    - subnet-04fd5e3b73fe6336c ## subnet-3-private 
+    - subnet-08a35c3884e596d87 ## subnet-4-private 
+    - subnet-06447907949354baa ## subnet-5-private 
+  allowed_ports:
+    - 80   ## http
+    - 443  ## https
+    - 1433 ## sql
+  allowedAccounts:
+    - 135815141753
+  allowedIPs:
+    - 13.226.204.113 # website domain IP
+    - 72.48.9.208 # Home IP
+
+  ## s3 buckets
+  website_bucket: www.uniteddreamhomes.com
+  allowed_url: www.uniteddreamhomes.com
+
+  #Secret
+  # pg_secret_name: postgresql-dev
+
+  # contact emailid from website
+  website_email_contact:
+    - info@globalsyspro.com
+    - uniteddreamhome@gmail.com

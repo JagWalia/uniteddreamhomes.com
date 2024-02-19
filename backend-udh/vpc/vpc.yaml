@@ -1,0 +1,300 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ''
+
+Parameters:
+
+  VpcCidrBlock:
+    Type: String
+    Default: '10.192.0.0/16'
+    Description: 'CIDR block for the VPC'
+
+Resources:
+  VPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: !Ref 'VpcCidrBlock'
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: vpc-udh
+  PublicSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 10.192.0.0/20
+      MapPublicIpOnLaunch: false
+      VpcId:
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-Public-Subnet-1
+      AvailabilityZone:
+        'Fn::Select':
+          - '0'
+          - 'Fn::GetAZs':
+              Ref: 'AWS::Region'
+  PublicSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 10.192.16.0/20
+      MapPublicIpOnLaunch: false
+      VpcId:
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-Public-Subnet-2
+      AvailabilityZone:
+        'Fn::Select':
+          - '1'
+          - 'Fn::GetAZs':
+              Ref: 'AWS::Region'
+  PrivateSubnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 10.192.32.0/20
+      MapPublicIpOnLaunch: false
+      VpcId:
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-Private-Subnet-1
+      AvailabilityZone:
+        'Fn::Select':
+          - '0'
+          - 'Fn::GetAZs':
+              Ref: 'AWS::Region'
+  PrivateSubnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 10.192.48.0/20
+      MapPublicIpOnLaunch: false
+      VpcId:
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-Private-Subnet-2
+      AvailabilityZone:
+        'Fn::Select':
+          - '1'
+          - 'Fn::GetAZs':
+              Ref: 'AWS::Region'
+  PrivateSubnet3:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 10.192.64.0/20
+      MapPublicIpOnLaunch: false
+      VpcId:
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-Private-Subnet-3
+      AvailabilityZone:
+        'Fn::Select':
+          - '2'
+          - 'Fn::GetAZs':
+              Ref: 'AWS::Region'
+  PrivateSubnet4:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      CidrBlock: 10.192.80.0/20
+      MapPublicIpOnLaunch: false
+      VpcId:
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-Private-Subnet-4
+      AvailabilityZone:
+        'Fn::Select':
+          - '3'
+          - 'Fn::GetAZs':
+              Ref: 'AWS::Region'
+
+  RouteTablePublic:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId:
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-Public-Route-Table
+  RouteTablePublicAssociation1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId:
+        Ref: RouteTablePublic
+      SubnetId:
+        Ref: PublicSubnet1
+  RouteTablePublicAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId:
+        Ref: RouteTablePublic
+      SubnetId:
+        Ref: PublicSubnet2
+
+  RouteTablePublicRoute0:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      RouteTableId:
+        Ref: RouteTablePublic
+      GatewayId:
+        Ref: Igw
+        
+  RouteTablePrivate:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId:
+        Ref: VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-Private-Route-Table
+
+  RouteTablePrivateAssociation1:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId:
+        Ref: RouteTablePrivate
+      SubnetId:
+        Ref: PrivateSubnet1
+
+  RouteTablePrivateAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId:
+        Ref: RouteTablePrivate
+      SubnetId:
+        Ref: PrivateSubnet2
+
+  RouteTablePrivateAssociation3:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId:
+        Ref: RouteTablePrivate
+      SubnetId:
+        Ref: PrivateSubnet3
+
+  RouteTablePrivateAssociation4:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      RouteTableId:
+        Ref: RouteTablePrivate
+      SubnetId:
+        Ref: PrivateSubnet4
+
+  RouteTablePrivate1Route0:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      RouteTableId:
+        Ref: RouteTablePrivate
+      NatGatewayId:
+        Ref: NatGw1
+  Igw:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties: {}
+  IGWAttachment:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId:
+        Ref: VPC
+      InternetGatewayId:
+        Ref: Igw
+  NatGw1:
+    Type: 'AWS::EC2::NatGateway'
+    Properties:
+      SubnetId:
+        Ref: PublicSubnet1
+      AllocationId:
+        'Fn::GetAtt':
+          - NatGw1ElasticIP
+          - AllocationId
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-NAT-GW
+  NatGw1ElasticIP:
+    Type: 'AWS::EC2::EIP'
+    Properties:
+      Domain: vpc
+
+  VPNHighSecurity:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "vpn-high-security-sg"
+      GroupDescription: "Security group for VPN Endpoints"
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - Description: SSH
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - Description: SSL - Added for API Gateway
+          IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Ref 'VpcCidrBlock'
+        - Description: Added for http - IPV4
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref 'VpcCidrBlock'
+        - Description: SSL - Added for API Gateway - IPV4
+          IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        - Description: Added for http - IPV4
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - Description: SSL - Added for API Gateway - IPV6
+          IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIpv6: ::/0
+        - Description: Added for http - IPV6
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIpv6: ::/0
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-VPNHighSecurity
+
+  NoIngressSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "no-ingress-sg"
+      GroupDescription: "Security group with no ingress rule"
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - Description: SSH
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref 'VpcCidrBlock'
+        - Description: SQL Port
+          IpProtocol: tcp
+          FromPort: 1433
+          ToPort: 1433
+          CidrIp: !Ref 'VpcCidrBlock'
+        - Description: Access to VPNHighSecurity SG
+          IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          SourceSecurityGroupId: !Ref VPNHighSecurity
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-NoIngressSecurityGroup
