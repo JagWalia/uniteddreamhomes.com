@@ -15,12 +15,35 @@ aws:
   allowedAccounts:
     - 135815141753
   allowedIPs:
-    - 13.226.204.113 # website domain IP
-    - 72.48.9.208 # Home IP
+    # - 13.226.204.113 # website domain IP
+    # - 108.138.246.11  # uniteddreamhomes.com.	60	A	108.138.246.11
+    # - 108.138.246.117 # uniteddreamhomes.com.	60	A	108.138.246.117
+    # - 108.138.246.48  # uniteddreamhomes.com.	60	A	108.138.246.48
+    # - 108.138.246.75  # uniteddreamhomes.com.	60	A	108.138.246.75
+    # - 13.226.204.92 # website domain IP
+    # - 13.226.204.20 # website domain IP
+    # - 13.226.204.61 # website domain IP
+
+    # - 3.161.242.66 # GlobalSysPro.com
+    # - 3.161.242.111 # GlobalSysPro.com
+    # - 3.161.242.53 # GlobalSysPro.com
+    # - 3.161.242.88 # GlobalSysPro.com
+
+    # - 72.48.9.208 # Home IP
+    # - 54.239.28.85 # amazon.com
+    # - 72.21.210.29 # amazonaws.com
 
   ## s3 buckets
   website_bucket: www.uniteddreamhomes.com
-  allowed_url: www.uniteddreamhomes.com
+  allowed_url: 
+    - https://www.uniteddreamhomes.com
+    - https://uniteddreamhomes.com
+    - www.uniteddreamhomes.com
+    # - www.uniteddreamhomes.com.s3-website-us-east-1.amazonaws.com
+    # - https://www.uniteddreamhomes.com.s3-website-us-east-1.amazonaws.com
+    - https://globalsyspro.com
+    - https://www.globalsyspro.com
+    - www.globalsyspro.com
 
   #Secret
   # pg_secret_name: postgresql-dev
@@ -29,3 +52,10 @@ aws:
   website_email_contact:
     - info@globalsyspro.com
     - uniteddreamhome@gmail.com
+
+  google_captcha_site_key_v2: 6LdGyXgpAAAAAEqk8MZsmc7KtU_nU2vzxPM1DcdE
+  google_captcha_server_key_v2: 6LdGyXgpAAAAANgGqK8_AOv5AI5fi9J1jI-gmEOg
+
+  google_captcha_site_key_v3: 6LeFs3gpAAAAADyMKnwuToczaUGbaaiE9dZs0B5b
+  google_captcha_server_key_v3: 6LeFs3gpAAAAAPMViOb_SKqmZnwQj9gxoO4sVLYj
+
