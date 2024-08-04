@@ -10,6 +10,8 @@ from aws_cdk import (
     CfnOutput,
     CfnResource,
     aws_apigateway as apigateway,
+    aws_logs as logs,
+    RemovalPolicy
 )
 
 from constructs import Construct
@@ -157,49 +159,50 @@ class BackendUdhStack(Stack):
                 ]
             )
 
+        # Define the CORS policy
+        cors_options = apigateway.CorsOptions(
+            allow_origins=allowed_urls_aws,
+            allow_methods=["OPTIONS", "POST"],
+            allow_headers=["Content-Type", "X-Amz-Date", "Authorization", "X-Api-Key", "X-Amz-Security-Token"]
+        )
+
         # Create an API Gateway
         api = apigateway.RestApi(self, f"{stack}-api",
             rest_api_name=f"{stack}-api",
-            description=f"{stack}-api",
-            policy=api_resource_policy
+            description="API Gateway for United Dream Homes",
+
         )
 
-         # Add CORS options to the resource
-        def add_cors_options(api_resource):
-            api_resource.add_method(
-                'OPTIONS',
-                apigateway.MockIntegration(
-                    integration_responses=[{
-                        'statusCode': '200',
-                        'responseParameters': {
-                            'method.response.header.Access-Control-Allow-Headers': "'Content-Type,Authorization'",
-                            'method.response.header.Access-Control-Allow-Origin': "'*'",
-                            'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,POST,GET'"
-                        }
-                    }],
-                    passthrough_behavior=apigateway.PassthroughBehavior.NEVER,
-                    request_templates={"application/json": "{\"statusCode\": 200}"}
-                ),
-                method_responses=[{
-                    'statusCode': '200',
-                    'responseParameters': {
-                        'method.response.header.Access-Control-Allow-Headers': True,
-                        'method.response.header.Access-Control-Allow-Origin': True,
-                        'method.response.header.Access-Control-Allow-Methods': True
-                    }
-                }]
-            )
+
 
         # Create a resource and method
         resource = api.root.add_resource("sendLeadMessage")
 
-        # Add CORS to the resource if it does not exist
-        try:
-            add_cors_options(resource)
-        except Exception as e:
-            print(f"CORS options already exist: {e}")
+        resource.add_method(
+                    "POST", 
+                    apigateway.LambdaIntegration(
+                        handler=email_lambda,
+                        proxy=True
+                        # request_templates={"application/json": '{ "statusCode": "200" }'},
+                ),
+                method_responses=
+                    [{
+                        "statusCode": "200",
+                        "responseParameters": {
+                            "method.response.header.Access-Control-Allow-Origin": True,
+                            "method.response.header.Access-Control-Allow-Headers": True,
+                            "method.response.header.Access-Control-Allow-Methods": True
+                        }
+                    }]
+            )
 
-        resource.add_method("POST", apigateway.LambdaIntegration(email_lambda))
+        # Enable CORS for the API Gateway resource
+        resource.add_cors_preflight(
+            allow_origins=allowed_urls_aws,
+            allow_methods=apigateway.Cors.ALL_METHODS,
+            allow_headers=["Content-Type", "Authorization", "X-Amz-Date", "X-Api-Key", "X-Amz-Security-Token"],
+            status_code=200
+        )
 
 
 
@@ -210,26 +213,40 @@ class BackendUdhStack(Stack):
             source_arn=api.arn_for_execute_api()
         )
 
-        api_deployment = apigateway.CfnDeployment(self, f'{stack}-deployment',
-            rest_api_id=api.rest_api_id,
-            stage_name=stage
+        # Grant API Gateway permissions to write logs to CloudWatch
+        api_role = iam.Role(
+            self, f'{stack}-api-role',
+            assumed_by=iam.ServicePrincipal('apigateway.amazonaws.com')
+        )
+
+        api_role.add_to_policy(
+            iam.PolicyStatement(
+                actions=['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
+                resources=['arn:aws:logs:*:*:*'],
+                effect=iam.Effect.ALLOW
+            )
+        )
+
+        # Create a deployment for the API Gateway
+        api_deployment = apigateway.Deployment(self, f'{stack}-deployment',
+            api=api
+        )
+
+        # Create a CloudWatch Log Group
+        log_group = logs.LogGroup(self, f'{stack}-log-group',
+            log_group_name=f'/aws/apigateway/{stack}',
+            removal_policy=RemovalPolicy.DESTROY,
+        )
+        # Associate the deployment with a stage
+        stage = apigateway.Stage(self, f'{stack}-stage',
+            deployment=api_deployment,
+            stage_name=stage,
+            logging_level=apigateway.MethodLoggingLevel.INFO,
+            data_trace_enabled=True,
+            access_log_destination=apigateway.LogGroupLogDestination(log_group),
+            access_log_format=apigateway.AccessLogFormat.clf(),
+            metrics_enabled=True  # Enable detailed metrics
         )
 
 
-        # api_resource_policy = iam.PolicyDocument(
-        #         statements=[
-        #             iam.PolicyStatement(
-        #                 principals=[iam.AnyPrincipal()],
-        #                 actions=['execute-api:Invoke'],
-        #                 resources=[api.arn_for_execute_api()],
-        #                 effect= iam.Effect.ALLOW,
-        #                 conditions= {
-        #                     "StringLike": {
-        #                         "aws:Referer": allowed_urls_aws
-        #                     }
-        #                 }
-        #             )
-        #         ]
-        #     )
-
-
+        
