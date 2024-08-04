@@ -4,10 +4,11 @@ import json
 import time
 # from secretmanager import get_secret
 import base64
-import datetime
+from datetime import datetime, timedelta
 
 import boto3
 from botocore.exceptions import ClientError
+
 
 # print(os.environ)
 
@@ -18,6 +19,18 @@ def handler(event, context):
     allowed_urls = os.environ['allowed_url']
 
     print(f'Allowed URLs: {allowed_urls}')
+
+    # Get the current UTC time
+    now_utc = datetime.utcnow()
+
+    # Central Time is UTC-6 hours; Central Daylight Time (CDT) is UTC-5 hours
+    # Check if daylight saving time is in effect (typically from March to November)
+    if now_utc.month >= 3 and now_utc.month <= 11:
+        # Daylight saving time (CDT)
+        central_offset = timedelta(hours=-5)
+    else:
+        # Standard time (CST)
+        central_offset = timedelta(hours=-6)
 
     # Extract the origin from the request headers
     origin = event.get('headers', {}).get('origin', '')
@@ -65,7 +78,11 @@ def handler(event, context):
     
     website_lead_topic = os.environ.get('website_lead_topic')
 
-    current_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # Get current Central Time
+    now_central = now_utc + central_offset
+    current_datetime = now_central.strftime('%Y-%m-%d %H:%M:%S %Z')
+    
+    # current_datetime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     subject_with_datetime = f"New Lead - {subject} - {current_datetime}"
 
     # Use boto3 to publish a message to the SNS topic
