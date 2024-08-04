@@ -1,0 +1,19 @@
+
+--download
+aws s3 cp s3://www.uniteddreamhomes.com . --recursive --profile jagwalia 
+
+
+--upload
+aws s3 cp assets/css/style.css s3://www.uniteddreamhomes.com/assets/css/style.css  --profile jagwalia
+aws s3 cp about.html s3://www.uniteddreamhomes.com  --profile jagwalia 
+aws s3 cp contact.html s3://www.uniteddreamhomes.com  --profile jagwalia 
+aws s3 cp index.html s3://www.uniteddreamhomes.com  --profile jagwalia 
+aws s3 cp services.html s3://www.uniteddreamhomes.com  --profile jagwalia 
+
+--local server
+python -m http.server
+
+http://localhost:8000/
+
+
+

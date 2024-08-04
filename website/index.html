@@ -75,7 +75,22 @@
     .icon-box p {
       font-size: 14px; /* Adjust the font size for the description */
     }
-  </style>
+
+    .button-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  .button-link:hover {
+    background-color: #2980b9;
+  }
+
+</style>
 </head>
 
 <body>
@@ -204,9 +219,13 @@
 
         <div class="row content">
           <div class="col-lg-6" data-aos="fade-right">
-            <h3>✔ <span style="color: #3498db;">Trusted Cash Home Buyers</span></h2>
-            <h3>✔ <span style="color: #27ae60;">Quick Cash Transactions for Fast Home Closings</span></h3>
-            <h3>✔ <span style="color: #e74c3c;">Expert Pre-Foreclosure and Tax Delinquency Assistance</span></h3>
+            <h3>✔ <span style="color: #3498db;font-size: 20px;">Trusted Cash Home Buyers</span></h2>
+            <h3>✔ <span style="color: #27ae60;font-size: 20px;">Quick Cash Transactions for Fast Home Closings</span></h3>
+            <h3>✔ <span style="color: #e74c3c;font-size: 20px;">Expert Pre-Foreclosure and Tax Delinquency Assistance</span></h3>
+
+            <!-- <h3><a href="contact.html" style="color: #101010;">Find out how we can help!</a></h3> -->
+            <h3><a href="contact.html" class="button-link">Find out how we can help!</a></h3>
+
             <!-- <h3>✔ <span style="color: #f39c12;">Discover Effective Credit-Saving Solutions for Real Estate</span></h3> -->
                                     
           </div>
@@ -237,7 +256,7 @@
       <div class="container" data-aos="fade-up">
 
         <div class="row">
-          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4" data-aos="zoom-in" data-aos-delay="100">
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-2" data-aos="zoom-in" data-aos-delay="100">
             <div class="icon-box iconbox-blue">
               <div class="icon">
                 <svg width="100" height="100" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
@@ -444,53 +463,6 @@
 
         </div> -->
 
-        <div class="row mt-5 justify-content-center" data-aos="fade-up">
-          <div class="col-lg-10">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
-                </div>
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="text" name="phone" class="form-control" id="phone" placeholder="Your Phone" required>
-                </div>
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-                </div>
-              </div>
-              <div class="form-group mt-3">
-                <input type="text" class="form-control" name="address" id="address" placeholder="Address" required>
-              </div>
-              <div class="form-group mt-3">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-              </div>
-              <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading"></div>
-                <div class="error-message"></div>
-                <div class="sent-message"></div>
-              </div>
-              <div class="my-3">
-                <div class="logo me-auto" style="color: black;">
-                  By completing this form, you give consent to United Dream Homes/Global Sys Pro to send SMS text messages. <BR>
-                  Message frequency varies. Standard message and data rates may apply.
-                  <div>
-                    <label>
-                      <input type="checkbox"  name="'unsubscribe" style=" width: 15px; height: 15px; padding: 0;  margin: 0; vertical-align: bottom; position: relative; top: -1px;" /> STOP to unsubscribe.
-                    </label>
-                  </div>
-                </div>
-                <div class="text-center"><button type="submit" style= "background-color: darkcyan;">Send Message</button></div>
-
-              </div>
-
-            </form>
-          </div>
-
-        </div>
-
       </div>
     </section><!-- End Portfolio Section -->
 
@@ -620,7 +592,7 @@
 
       <div class="me-md-auto text-center text-md-start">
         <div class="copyright">
-          &copy; Copyright <strong><span>United Dream Homes</span></strong>. All Rights Reserved
+          &copy; Copyright <strong><span>United Dream Homes</span></strong>. All Rights Reserved - v2
         </div>
         <div class="credits">
           <!-- All the links in the footer should remain intact. -->

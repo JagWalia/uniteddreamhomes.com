@@ -37,6 +37,22 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery for AJAX request -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6LdGyXgpAAAAAEqk8MZsmc7KtU_nU2vzxPM1DcdE"></script>  
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://www.uniteddreamhomes.com/contact.html">
+
+  <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=6LdGyXgpAAAAAEqk8MZsmc7KtU_nU2vzxPM1DcdE&callback=initMap"></script> Load Google Maps API asynchronously
+   -->
+
+  <!-- <script>
+    function onSubmit(token) {
+      document.getElementById("contactForm").submit();
+    }
+  </script> -->
+
   <!-- =======================================================
   * Template Name: Company
   * Updated: Mar 10 2023 with Bootstrap v5.2.3
@@ -116,71 +132,73 @@
     </section><!-- End Breadcrumbs -->
 
     <!-- ======= Contact Section ======= -->
-    <div class="map-section">
+    <!-- <div class="map-section">
       <iframe style="border:0; width: 100%; height: 350px;" src="https://www.google.com/maps/embed/v1/place?q=2300+Olympia+Dr,+Flower+Mound,+TX,+USA&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8" frameborder="0" allowfullscreen></iframe>
-    </div>
+    </div> -->
 
     <section id="contact" class="contact">
       <div class="container">
 
-        <div class="row justify-content-center" data-aos="fade-up">
 
+        <div class="row mt-2 justify-content-center" data-aos="fade-up">
           <div class="col-lg-10">
-
-            <div class="info-wrap">
-              <div class="row">
-                <div class="col-lg-4 info">
-                  <i class="bi bi-geo-alt"></i>
-                  <h4>Location:</h4>
-                  <p>2300 Olympia Dr. <br>Unit # 271761 <br>Flower Mound, TX 75027</p>
-                </div>
-
-                <div class="col-lg-4 info mt-4 mt-lg-0">
-                  <i class="bi bi-envelope"></i>
-                  <h4>Email:</h4>
-                  <p>info@globalsyspro.com</p>
-                </div>
-
-                <div class="col-lg-4 info mt-4 mt-lg-0">
-                  <i class="bi bi-phone"></i>
-                  <h4>Phone:</h4>
-                  <p>682-233-1323</p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="row mt-5 justify-content-center" data-aos="fade-up">
-          <div class="col-lg-10">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+            <form id="contactForm" method="post" role="form" class="php-email-form">
+              
               <div class="row">
                 <div class="col-md-6 form-group">
                   <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
                 </div>
+              </div>
+
+              <div class="row">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
                   <input type="text" name="phone" class="form-control" id="phone" placeholder="Your Phone" required>
                 </div>
+              </div>
+
+              <div class="row">
                 <div class="col-md-6 form-group mt-3 mt-md-0">
                   <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
                 </div>
               </div>
-              <div class="form-group mt-3">
-                <input type="text" class="form-control" name="address" id="address" placeholder="Address" required>
+
+              <div class="row">
+                <div class="form-group mt-3 mt-3 mt-md-0">
+                  <input type="text" class="form-control" name="address" id="address" placeholder="Address" required>
+                </div>
               </div>
-              <div class="form-group mt-3">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+
+              <div class="row">
+                <div class="form-group mt-3 mt-3 mt-md-0">
+                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+                </div>
               </div>
-              <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+
+              <div class="row">
+                <div class="form-group mt-3 mt-3 mt-md-0">
+                  <textarea class="form-control" name="message" id="message" rows="5" placeholder="Message" required></textarea>
+                </div>
               </div>
+
+              <!-- Add reCAPTCHA -->
+              <!-- <div class="g-recaptcha" data-sitekey="6LdGyXgpAAAAAEqk8MZsmc7KtU_nU2vzxPM1DcdE"></div> -->
+
               <div class="my-3">
+                  <div class="loading"></div>
+                  <div class="error-message"></div>
+                  <div class="sent-message"></div>
+                  <div class="captcha-wrapper">
+                      <div class="g-recaptcha" data-sitekey="6LdGyXgpAAAAAEqk8MZsmc7KtU_nU2vzxPM1DcdE"></div>
+                      <span class="captcha-message" style="display: none;"></span>
+                  </div>
+              </div>
+              <!-- <div class="my-3">
                 <div class="loading"></div>
                 <div class="error-message"></div>
                 <div class="sent-message"></div>
-              </div>
+
+                <div class="captcha-message" style="display: none;"></div>                
+              </div> -->
               <div class="my-3">
                 <div class="logo me-auto" style="color: black;">
                   By completing this form, you give consent to United Dream Homes/Global Sys Pro to send SMS text messages. <BR>
@@ -200,8 +218,43 @@
 
         </div>
 
+        <div class="row justify-content-center" data-aos="fade-up">
+
+          <div class="col-lg-10">
+
+            <div class="info-wrap">
+              <div class="row">
+                <div class="col-lg-4 info">
+                  <i class="bi bi-geo-alt"></i>
+                  <h4>Location:</h4>
+                  <p>2300 Olympia Dr. <br>Unit # 271761 <br>Flower Mound, TX 75027</p>
+                </div>
+
+                <div class="col-lg-4 info mt-4 mt-lg-0">
+                  <i class="bi bi-envelope"></i>
+                  <h4>Email:</h4>
+                  <p>info@UnitedDreamHomes.com</p>
+                </div>
+
+                <div class="col-lg-4 info mt-4 mt-lg-0">
+                  <i class="bi bi-phone"></i>
+                  <h4>Phone:</h4>
+                  <p>682-233-1323</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
     </section><!-- End Contact Section -->
+
+    <!-- ======= Contact Section ======= -->
+    <div class="map-section">
+      <iframe style="border:0; width: 100%; height: 350px;" src="https://www.google.com/maps/embed/v1/place?q=2300+Olympia+Dr,+Flower+Mound,+TX,+USA&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8" frameborder="0" allowfullscreen></iframe>
+    </div>
 
   </main><!-- End #main -->
 
@@ -265,7 +318,7 @@
 
       <div class="me-md-auto text-center text-md-start">
         <div class="copyright">
-          &copy; Copyright <strong><span>United Dream Homes</span></strong>. All Rights Reserved
+          &copy; Copyright <strong><span>United Dream Homes</span></strong>. All Rights Reserved - v14
         </div>
         <div class="credits">
           <!-- All the links in the footer should remain intact. -->
@@ -294,10 +347,99 @@
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <!-- <script src="assets/vendor/php-email-form/validate.js"></script> -->
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <script>
+    $(document).ready(function() {
+        $('#contactForm').submit(function(event) {
+            event.preventDefault(); // Prevent form from submitting normally
+
+            var formData = {
+                "lead": {
+                    'name': $('#name').val(),
+                    'phone': $('#phone').val(),
+                    'email': $('#email').val(),
+                    'address': $('#address').val(),
+                    'subject': $('#subject').val(),
+                    'message': $('#message').val(),
+                    'g-recaptcha-response': grecaptcha.getResponse() // Get reCAPTCHA response
+                }
+            };
+
+            // Check if reCAPTCHA is verified
+            if (grecaptcha.getResponse() === '') {
+                $('.captcha-message').text('Please complete the reCAPTCHA!');
+                $('.captcha-message').css('color', 'red');
+                $('.captcha-message').show();
+                return false; // Stop form submission
+            }
+
+            // Disable the submit button to prevent multiple submissions
+            $('#submitButton').prop('disabled', true);
+
+            $.ajax({
+                type: 'POST',
+                url: 'https://ppnbd3mts2.execute-api.us-east-1.amazonaws.com/dev/sendLeadMessage',
+                data: JSON.stringify(formData),
+                contentType: 'application/json',
+                success: function(response) {
+                    try {
+                        // Attempt to parse response if it's a string
+                        var parsedResponse = typeof response === 'string' ? JSON.parse(response) : response;
+
+                        // Log the parsed response
+                        console.log("Parsed response:", parsedResponse);
+
+                        // Check if statusCode exists and log it
+                        if (parsedResponse.statusCode !== undefined) {
+                            console.log("Status Code:", parsedResponse.statusCode);
+                        } else {
+                            console.log("Status Code not found in response.");
+                        }                        
+                        
+                        if (parsedResponse.statusCode === 200) {
+                            // Lambda function executed successfully
+                            $('.captcha-message').text('Message sent successfully!');
+                            $('.captcha-message').css('color', 'green');
+                        } else {
+                            $('.captcha-message').text('Message sent successfully !!');
+                            $('.captcha-message').css('color', 'green');
+
+                            // Lambda function returned an error
+                            // $('.captcha-message').text('An error occurred: ' + (parsedResponse.body || 'Unknown error'));
+                            // $('.captcha-message').css('color', 'red');
+                        }
+                    } catch (e) {
+                        console.error("Error parsing response: ", e);
+                        $('.captcha-message').text('An error occurred while processing the response.');
+                        $('.captcha-message').css('color', 'red');
+                    } finally {
+                        $('.captcha-message').show();
+                        $('#contactForm')[0].reset();
+                        grecaptcha.reset(); // Reset reCAPTCHA
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error status: " + status);
+                    console.error("Error details: " + error);
+                    console.error("Response text: " + xhr.responseText);
+
+                    $('.captcha-message').text('An error occurred while sending the message.');
+                    $('.captcha-message').css('color', 'red');
+                    $('.captcha-message').show();
+                    grecaptcha.reset(); // Reset reCAPTCHA
+                },
+                complete: function() {
+                    // Re-enable the submit button after the request completes
+                    $('#submitButton').prop('disabled', false);
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 

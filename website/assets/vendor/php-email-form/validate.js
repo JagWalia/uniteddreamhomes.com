@@ -78,7 +78,7 @@
   }
 
   function displayError(thisForm, error) {
-    error = 'Message Sent'
+    // error = 'Message Sent'
     thisForm.querySelector('.loading').classList.remove('d-block');
     thisForm.querySelector('.error-message').innerHTML = error;
     thisForm.querySelector('.error-message').classList.add('d-block');
